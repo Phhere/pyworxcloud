@@ -7,7 +7,7 @@ from .commands import WorxCommand
 from .datamapping import DataMap
 
 from .endpoints import CloudType
-from .exceptions import MowerNotFoundError, TokenError
+from .exceptions import AuthorizationError, MowerNotFoundError, RequestError, TokenError
 from .handlers.mqtt import MQTT
 from .handlers.requests import GET, HEADERS
 from .status import WorxError, WorxStatus
@@ -45,7 +45,12 @@ class WorxCloud:
         self._cloud = cloud
 
         # Get token from AUTH endpoint
-        self.token = Token(self._email, self._password, self._cloud)
+        try:
+            self.token = Token(self._email, self._password, self._cloud)
+        except RequestError:
+            raise AuthorizationError(
+                "Error in email, password or the selected cloud type."
+            )
 
         if isinstance(self.token.access_token, type(None)) or isinstance(
             self.token.refresh_token, type(None)
@@ -66,7 +71,13 @@ class WorxCloud:
                 new_mower.update(data)
             else:
                 for key in mower:
-                    if key in ["serial_number","user_id","mqtt_endpoint","name","mqtt_topics"]:
+                    if key in [
+                        "serial_number",
+                        "user_id",
+                        "mqtt_endpoint",
+                        "name",
+                        "mqtt_topics",
+                    ]:
                         new_mower.update({key: mower[key]})
 
             new_mower.update({"has_data": False})
