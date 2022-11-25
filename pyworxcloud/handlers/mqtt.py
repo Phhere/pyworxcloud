@@ -32,7 +32,6 @@ class MQTT:
 
         self._configuration = mqtt_connection_builder.direct_with_custom_authorizer(
             endpoint=endpoint,
-            ca_filepath=cert,
             auth_username=f"bot?jwt={urllib.parse.quote(accessTokenParts[0])}.{urllib.parse.quote(accessTokenParts[1])}",
             auth_authorizer_name="",
             auth_authorizer_signature=urllib.parse.quote(accessTokenParts[2]),
