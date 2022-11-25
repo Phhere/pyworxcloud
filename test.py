@@ -6,7 +6,7 @@ from os import environ
 from pyworxcloud import WorxCloud
 
 EMAIL = environ["EMAIL"]
-PASS = environ["PASSWORD"]
+PASS = "123"
 TYPE = environ["TYPE"]
 
 tz = datetime.datetime.now().astimezone().tzinfo.tzname(None)
