@@ -5,7 +5,6 @@ import json
 
 from .commands import WorxCommand
 from .datamapping import DataMap
-
 from .endpoints import CloudType
 from .exceptions import AuthorizationError, MowerNotFoundError, RequestError, TokenError
 from .handlers.mqtt import MQTT
