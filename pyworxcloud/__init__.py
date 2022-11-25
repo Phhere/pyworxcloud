@@ -5,8 +5,9 @@ import json
 
 from .commands import WorxCommand
 from .datamapping import DataMap
+
 from .endpoints import CloudType
-from .exceptions import AuthorizationError, MowerNotFoundError, RequestError, TokenError
+from .exceptions import MowerNotFoundError, TokenError
 from .handlers.mqtt import MQTT
 from .handlers.requests import GET, HEADERS
 from .status import WorxError, WorxStatus
@@ -44,12 +45,7 @@ class WorxCloud:
         self._cloud = cloud
 
         # Get token from AUTH endpoint
-        try:
-            self.token = Token(self._email, self._password, self._cloud)
-        except RequestError:
-            raise AuthorizationError(
-                "Error in email, password or the selected cloud type."
-            )
+        self.token = Token(self._email, self._password, self._cloud)
 
         if isinstance(self.token.access_token, type(None)) or isinstance(
             self.token.refresh_token, type(None)
